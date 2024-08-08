@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import { IoMenu } from 'react-icons/io5';
 
-const Navbar = () => {
+const Navbar = ({ onLoginClick, onSignUpClick }) => {
 
     const [toggle,setToggle] = useState(0);
 
@@ -11,8 +11,8 @@ const Navbar = () => {
             <a href="/">Home</a>
             <a href="/about">About</a>
             <a href="/contact">Contact Us</a>
-            <button>Sign In</button>
-            <button className='p-3 bg-yellow-400 rounded-md'>Sign Up</button>
+            <button onClick={onLoginClick}>Sign In</button>
+            <button className='p-3 bg-yellow-400 rounded-md'onClick={onSignUpClick}>Sign Up</button>
     </div>}
     <div className='flex justify-between mt-4 px-4 py-2 lg:h-24 lg:flex lg:items-center lg:justify-between lg:px-28 lg:pt-16 lg:text-xl'>
         <div className='flex items-center gap-16' >
@@ -24,8 +24,8 @@ const Navbar = () => {
             </div>
         </div>
         <div className='hidden lg:flex lg:items-center lg:gap-10'>
-            <button>Sign In</button>
-            <button className='p-3 bg-yellow-400 rounded-md'>Sign Up</button>
+            <button onClick={onLoginClick}>Sign In</button>
+            <button className='p-3 bg-yellow-400 rounded-md' onClick={onSignUpClick}>Sign Up</button>
         </div>
         <button className='flex text-4xl pr-8 items-center z-10 text-white lg:hidden' onClick={()=>{setToggle(!toggle)}}>
             <IoMenu/>
