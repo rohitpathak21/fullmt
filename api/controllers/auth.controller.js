@@ -2,65 +2,48 @@ import bcrypt from "bcrypt"
 import prisma from "../libs/prisma.js"
 import jwt from "jsonwebtoken"
 
-export const register =  async (req, res) => {
-  const { fullname, email, age, gender, phone, address, password } = req.body;
-  try
-  {
-  const hashedPassword = await bcrypt.hash(password,10);
 
-  // console.log(req.body)
-  
-  // const newUser = await prisma.user.create({
-  //   data: {
-  //     fullname: req.body.fullname,
-  //     email: req.body.email,
-  //     age: req.body.age,
-  //     gender: req.body.gender,
-  //     phone: req.body.phone,
-  //     password: hashedPassword,
-  //     address: {
-  //       create: {
-  //         street: req.body.address?.street,
-  //         city: req.body.address?.city,
-  //         state: req.body.address?.state,
-  //         zipCode: req.body.address?.zipCode
-  //       }
-  //     }
-  //   }
-  // });
-  
-  // console.log(newUser);
-  // res.status(201).json({message:"user created successfully"}); 
+export const register = async (req, res) => {
+  const { fullname, email, age, gender, phone, street, area, city, pin, password } = req.body;
 
-  const newUser = await prisma.user.create({
-    data: {
-      fullname: req.body.fullname,
-      email: req.body.email,
-      age: req.body.age,
-      gender: req.body.gender,
-      phone: req.body.phone,
-      password: hashedPassword,
-      address: {
-        create: {
-          street: req.body.address?.street,
-          city: req.body.address?.city,
-          state: req.body.address?.state,
-          zipCode: req.body.address?.zipCode
-        }
-      }
-    },
-    include:{
-      address: true
+  try {
+    // Hash the password
+    const hashedPassword = await bcrypt.hash(password, 10);
+
+    // Check if email is already in use
+    const existingUser = await prisma.user.findUnique({
+      where: { email }
+    });
+
+    if (existingUser) {
+      return res.status(400).json({ message: "Email is already in use" });
     }
-  });
-  res.status(201).json({message:"user created successfully"}); 
-}
 
-  catch(err){
-    console.log(err)
-    res.status(501).json({message:"Failed to create user"});
+    // Create new user
+    const newUser = await prisma.user.create({
+      data: {
+        fullname,
+        email,
+        age,
+        gender, 
+        phone,
+        street,
+        area,
+        city,
+        pin,
+        password: hashedPassword,
+        isVerified: false, // Default to false if not provided
+      },
+    });
+
+    res.status(201).json({ message: "User created successfully", user: newUser });
+  } catch (err) {
+    console.error(err); // More detailed logging
+    res.status(500).json({ message: "Failed to create user" });
   }
 };
+
+
 
 
 export const login = async (req, res) => {
@@ -93,7 +76,7 @@ export const login = async (req, res) => {
     res.cookie("token", token , {
       httpOnly: true,
       maxAge: age,
-    }).status(200).json({message:"login successful"})
+    }).status(200).json({message:"Login successful"})
 
   }
   catch(err){

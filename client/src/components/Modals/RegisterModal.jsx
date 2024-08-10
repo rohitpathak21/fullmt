@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+import {React, useState} from "react";
+import { useForm } from "react-hook-form";
 import axios from "axios";
 import { FcGoogle } from "react-icons/fc";
 import Modal from "./Modals";
@@ -6,67 +7,52 @@ import Heading from "../Heading";
 import Input from "../Input";
 import toast from "react-hot-toast";
 import Button from "../Button";
-import { z } from "zod";
 
-// Define the Zod schema
-const schema = z.object({
-  email: z.string().email("Invalid email address"),
-  name: z.string().min(1).max(20).regex(/^[A-Za-z\s]+$/, "Name should not contain numbers"),
-  gender: z.string().regex(/^(Male|Female)$/, "Gender should be either Male or Female"),
-  age: z.number().int().min(1).max(99, "Age should be between 1 and 99"),
-  phone: z.string().length(10).regex(/^[0-9]+$/, "Phone number should be 10 digits long"),
-  password: z.string().min(8).max(15).regex(/(?=.*[0-9])(?=.*[^a-zA-Z0-9])/, "Password must contain at least one number and one special character"),
-});
+const capitalizeWords = (str) => {
+  return str
+    .split(" ")
+    .map((word) => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
+    .join(" ");
+};
+
+const capitalizeFirstLetter = (str) => {
+  if (!str) return "";
+  return str.charAt(0).toUpperCase() + str.slice(1).toLowerCase();
+};
 
 const RegisterModal = ({ isOpen, onClose, onLogin }) => {
-  const [isLoading, setIsLoading] = useState(false);
-  const [formData, setFormData] = useState({
-    email: "",
-    name: "",
-    gender: "",
-    age: "",
-    phone: "",
-    password: "",
-  });
-  const [errors, setErrors] = useState({});
+  const {
+    register,
+    handleSubmit,
+    formState: { errors, isSubmitting },
+  } = useForm();
 
-  const handleChange = (e) => {
-    setFormData({
-      ...formData,
-      [e.target.id]: e.target.value,
-    });
-  };
-
-  const handleSubmit = async () => {
-    setIsLoading(true);
-    setErrors({}); // Clear previous errors
+  const onSubmit = async (data) => {
+    // Normalize email to lowercase and capitalize first letter of gender
+    const normalizedData = {
+      ...data,
+      email: data.email.toLowerCase().trim(),
+      gender: capitalizeFirstLetter(data.gender),
+      fullname: capitalizeWords(data.fullname), // Capitalize each word in the name
+    };
 
     try {
-      schema.parse(formData);
-
-      // If validation is successful, make API request
-      try {
-        const response = await axios.post("http://localhost:8800/auth/register", formData);
-        toast.success("Registration successful!");
-        onClose(); // Close modal on success
-      } catch (error) {
+      console.log(normalizedData);
+      await axios.post("http://localhost:8800/api/auth/register", normalizedData);
+      toast.success("Registration successful! Please check your email for verification.");
+    } catch (error) {
+      console.error("Error response:", error.response);
+      if (
+        error.response &&
+        error.response.data &&
+        error.response.data.message === "Email is already in use"
+      ) {
+        toast.error("The email is already in use. Please choose another one.");
+      } else {
         toast.error("Something went wrong!");
       }
-
-    } catch (error) {
-      if (error instanceof z.ZodError) {
-        // Set errors if validation fails
-        const formattedErrors = error.errors.reduce((acc, curr) => {
-          acc[curr.path[0]] = curr.message;
-          return acc;
-        }, {});
-        setErrors(formattedErrors);
-      } else {
-        toast.error("An unexpected error occurred!");
-      }
-    } finally {
-      setIsLoading(false);
     }
+  
   };
 
   const bodyContent = (
@@ -77,21 +63,30 @@ const RegisterModal = ({ isOpen, onClose, onLogin }) => {
           id="email"
           label="Email"
           type="text"
-          disabled={isLoading}
-          required
-          value={formData.email}
-          onChange={handleChange}
-          error={errors.email} // Pass error message
+          disabled={isSubmitting}
+          {...register("email", {
+            required: "Email is required",
+            pattern: {
+              value: /^\s*[^\s@]+@[^\s@]+\.[^\s@]+\s*$/,
+              message: "Invalid email address",
+            },
+          })}
+          error={errors.email?.message}
         />
+
         <Input
-          id="name"
+          id="fullname"
           label="Name"
           type="text"
-          disabled={isLoading}
-          required
-          value={formData.name}
-          onChange={handleChange}
-          error={errors.name} // Pass error message
+          disabled={isSubmitting}
+          {...register("fullname", {
+            required: "Name is required",
+            maxLength: {
+              value: 20,
+              message: "Name must be less than 20 characters",
+            },
+          })}
+          error={errors.name?.message}
         />
       </div>
 
@@ -100,21 +95,37 @@ const RegisterModal = ({ isOpen, onClose, onLogin }) => {
           id="gender"
           label="Gender"
           type="text"
-          disabled={isLoading}
-          required
-          value={formData.gender}
-          onChange={handleChange}
-          error={errors.gender} // Pass error message
+          disabled={isSubmitting}
+          {...register("gender", {
+            required: "Gender is required",
+            validate: (value) => {
+              const normalizedValue = value.toLowerCase();
+              return (
+                ["male", "female", "transgender"].includes(normalizedValue) ||
+                "Invalid gender"
+              );
+            },
+          })}
+          error={errors.gender?.message}
         />
         <Input
           id="age"
           label="Age"
           type="number"
-          disabled={isLoading}
-          required
-          value={formData.age}
-          onChange={handleChange}
-          error={errors.age} // Pass error message
+          disabled={isSubmitting}
+          {...register("age", {
+            required: "Age is required",
+            valueAsNumber: true,
+            min: {
+              value: 1,
+              message: "Age must be a positive number",
+            },
+            max: {
+              value: 120,
+              message: "Age must be less than 120",
+            },
+          })}
+          error={errors.age?.message}
         />
       </div>
 
@@ -123,21 +134,34 @@ const RegisterModal = ({ isOpen, onClose, onLogin }) => {
           id="phone"
           label="Phone"
           type="text"
-          disabled={isLoading}
-          required
-          value={formData.phone}
-          onChange={handleChange}
-          error={errors.phone} // Pass error message
+          disabled={isSubmitting}
+          {...register("phone", {
+            required: "Phone number is required",
+            pattern: {
+              value: /^\+?[1-9]\d{1,14}$/, // E.164 format
+              message: "Invalid phone number",
+            },
+          })}
+          error={errors.phone?.message}
         />
         <Input
           id="password"
           label="Password"
           type="password"
-          disabled={isLoading}
-          required
-          value={formData.password}
-          onChange={handleChange}
-          error={errors.password} // Pass error message
+          disabled={isSubmitting}
+          {...register("password", {
+            required: "Password is required",
+            minLength: {
+              value: 6,
+              message: "Password must be at least 6 characters long",
+            },
+            pattern: {
+              value: /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&]).+$/, // At least one uppercase, one lowercase, one number, and one special character
+              message:
+                "Password must include uppercase, lowercase letters, a number, and a special character",
+            },
+          })}
+          error={errors.password?.message}
         />
       </div>
     </div>
@@ -150,7 +174,7 @@ const RegisterModal = ({ isOpen, onClose, onLogin }) => {
         outline
         label="Continue with Google"
         icon={FcGoogle}
-        onClick={() => toast.info("Google Sign-In not implemented yet!")}
+        onClick={() => toast.error("Google Sign-In not implemented yet!")}
       />
       <div className="text-neutral-500 text-center mt-4 font-light">
         <div className="flex flex-row justify-center items-center gap-2">
@@ -168,12 +192,12 @@ const RegisterModal = ({ isOpen, onClose, onLogin }) => {
 
   return (
     <Modal
-      disabled={isLoading}
+      disabled={isSubmitting}
       isOpen={isOpen}
       title="Register"
       actionLabel="Continue"
       onClose={onClose}
-      onSubmit={handleSubmit} // Pass handleSubmit as onSubmit
+      onSubmit={handleSubmit(onSubmit)} // Use handleSubmit from react-hook-form
       body={bodyContent}
       footer={footerContent}
     />

@@ -4,6 +4,7 @@ import LoginModal from "./components/Modals/LoginModal";
 import RegisterModal from "./components/Modals/RegisterModal";
 import RoleSignUp from "./components/Modals/RoleSignUp";
 import RoleLogin from "./components/Modals/RoleLogin";
+import { Toaster , toast} from "react-hot-toast";
 
 const App = () => {
   const [isLoginOpen, setIsLoginOpen] = useState(false);
@@ -72,6 +73,8 @@ const App = () => {
       isOpen={isRoleLoginOpen}
       onClose={closeModals}
       onStudentSelect={openLoginModal}/>
+
+      <Toaster/>
 
     </>
   );
