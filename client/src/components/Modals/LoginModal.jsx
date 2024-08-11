@@ -1,4 +1,6 @@
-import React, { useState } from "react";
+import React from "react";
+import { useForm } from "react-hook-form";
+import axios from "axios";
 import { FcGoogle } from "react-icons/fc";
 import Modal from "./Modals";
 import Heading from "../Heading";
@@ -7,20 +9,55 @@ import toast from "react-hot-toast";
 import Button from "../Button";
 
 const LoginModal = ({ isOpen, onClose, onSignUp }) => {
-  const [isLoading, setIsLoading] = useState(false);
+  const {
+    register,
+    handleSubmit,
+    formState: { errors, isSubmitting },
+  } = useForm();
+
+  const onSubmit = async (data) => {
+    const sanitizedData = {
+      ...data,
+      email: data.email.toLowerCase(), // Ensure email is lowercase before submission
+    };
+
+    try {
+      const response = await axios.post("http://localhost:8800/api/auth/login", sanitizedData, {
+        withCredentials: true, // Include credentials to handle cookies
+      });
+
+      toast.success("Login successful!");
+      console.log(response.data);
+      onClose(); // Close the modal on successful login
+      // Redirect user or handle login success
+    } catch (error) {
+      if (error.response && error.response.data) {
+        toast.error(error.response.data.message || "Login failed. Please try again.");
+      } else {
+        toast.error("Something went wrong. Please try again.");
+      }
+    }
+  };
 
   const bodyContent = (
     <div className="flex flex-col gap-4">
       <Heading center title="Welcome back" subtitle="Login to your account" />
-      
+
       <div className="flex flex-col md:flex-row gap-4">
         <Input
           id="email"
           label="Email"
           type="text"
-          disabled={isLoading}
-          required
-          errors={{}} 
+          disabled={isSubmitting}
+          {...register("email", {
+            required: "Email is required",
+            validate: (value) => {
+              const lowercaseEmail = value.toLowerCase();
+              const pattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+              return pattern.test(lowercaseEmail) || "Invalid email address";
+            },
+          })}
+          error={errors.email?.message}
         />
       </div>
 
@@ -29,9 +66,27 @@ const LoginModal = ({ isOpen, onClose, onSignUp }) => {
           id="password"
           label="Password"
           type="password"
-          disabled={isLoading}
-          required
-          errors={{}}
+          disabled={isSubmitting}
+          {...register("password", {
+            required: "Password is required",
+            validate: (value) => {
+              const hasUpperCase = /[A-Z]/.test(value);
+              const hasLowerCase = /[a-z]/.test(value);
+              const hasSpecialChar = /[!@#$%^&*(),.?":{}|<>]/.test(value);
+
+              if (!hasUpperCase) {
+                return "Password must contain at least one uppercase letter";
+              }
+              if (!hasLowerCase) {
+                return "Password must contain at least one lowercase letter";
+              }
+              if (!hasSpecialChar) {
+                return "Password must contain at least one special character";
+              }
+              return true;
+            },
+          })}
+          error={errors.password?.message}
         />
       </div>
     </div>
@@ -44,7 +99,7 @@ const LoginModal = ({ isOpen, onClose, onSignUp }) => {
         outline
         label="Continue with Google"
         icon={FcGoogle}
-        onClick={() => toast.info("Google Sign-In not implemented yet!")}
+        onClick={() => toast.error("Google Sign-In not implemented yet!")}
       />
 
       <div className="text-neutral-500 text-center mt-4 font-light">
@@ -63,12 +118,12 @@ const LoginModal = ({ isOpen, onClose, onSignUp }) => {
 
   return (
     <Modal
-      disabled={isLoading}
+      disabled={isSubmitting}
       isOpen={isOpen}
       title="Login"
       actionLabel="Continue"
       onClose={onClose}
-      onSubmit={() => {}}
+      onSubmit={handleSubmit(onSubmit)}
       body={bodyContent}
       footer={footerContent}
     />

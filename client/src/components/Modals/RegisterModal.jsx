@@ -40,6 +40,7 @@ const RegisterModal = ({ isOpen, onClose, onLogin }) => {
       console.log(normalizedData);
       await axios.post("http://localhost:8800/api/auth/register", normalizedData);
       toast.success("Registration successful! Please check your email for verification.");
+      onLogin();
     } catch (error) {
       console.error("Error response:", error.response);
       if (

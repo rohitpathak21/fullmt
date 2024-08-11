@@ -1,17 +1,21 @@
 import React, { useState } from "react";
+import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import Navbar from "./components/Navbar/Navbar";
 import LoginModal from "./components/Modals/LoginModal";
 import RegisterModal from "./components/Modals/RegisterModal";
 import RoleSignUp from "./components/Modals/RoleSignUp";
 import RoleLogin from "./components/Modals/RoleLogin";
-import { Toaster , toast} from "react-hot-toast";
+import { Toaster } from "react-hot-toast";
+import About from "./pages/about";
+import Contact from "./pages/contact";
+import Profile from "./pages/profile";
+import Home from "./pages/home" // Assuming you create a Profile page
 
 const App = () => {
   const [isLoginOpen, setIsLoginOpen] = useState(false);
   const [isRegisterOpen, setIsRegisterOpen] = useState(false);
   const [isRoleSignUpOpen, setIsRoleSignUpOpen] = useState(false);
   const [isRoleLoginOpen, setIsRoleLoginOpen] = useState(false);
-
 
   const openLoginModal = () => {
     setIsLoginOpen(true);
@@ -49,11 +53,22 @@ const App = () => {
   }
 
   return (
-    <>
+    <Router>
       <Navbar
         onLoginClick={openRoleLoginModal}
         onSignUpClick={openRoleSignUpModal}
       />
+
+      <Routes>
+      <Route
+          path="/"
+          element={<Home />}
+        />
+        <Route path="/about" element={<About />} />
+        <Route path="/contact" element={<Contact />} />
+        <Route path="/profile" element={<Profile />} />
+      </Routes>
+
       <LoginModal 
         isOpen={isLoginOpen} 
         onClose={closeModals} 
@@ -75,8 +90,7 @@ const App = () => {
       onStudentSelect={openLoginModal}/>
 
       <Toaster/>
-
-    </>
+    </Router>
   );
 };
 
