@@ -1,10 +1,14 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import { IoMenu } from 'react-icons/io5';
 import { Link, useLocation } from 'react-router-dom';
+import { AuthContext } from '../../context/AuthContext';
 
 const Navbar = ({ onLoginClick, onSignUpClick }) => {
     const [toggle, setToggle] = useState(false);
     const location = useLocation(); // Get current location
+
+    const {currentUser} = useContext(AuthContext)
+    console.log(currentUser);
 
     // Helper function to determine if a link is active
     const isActive = (path) => location.pathname === path 
@@ -14,7 +18,7 @@ const Navbar = ({ onLoginClick, onSignUpClick }) => {
     return (
         <>
             {toggle && 
-                <div className='absolute flex flex-col gap-10 bg-black text-white h-[100vh] w-full items-center top-0 justify-center right-0'>
+                <div className='z-10 absolute flex flex-col gap-10 bg-black text-white h-[100vh] w-full items-center top-0 justify-center right-0'>
                     <Link 
                         to="/" 
                         className={isActive('/')} 
@@ -36,18 +40,26 @@ const Navbar = ({ onLoginClick, onSignUpClick }) => {
                     >
                         Contact Us
                     </Link>
-                    <button 
+                    {currentUser==null && <button 
                         className='text-white' 
                         onClick={() => { onLoginClick(); setToggle(false); }}
                     >
                         Sign In
-                    </button>
-                    <button 
+                    </button>}
+                    {!currentUser && <button 
                         className='p-3 bg-yellow-400 text-black rounded-md' 
                         onClick={() => { onSignUpClick(); setToggle(false); }}
                     >
                         Sign Up
-                    </button>
+                    </button>}
+                    {currentUser && <button className='p-3 bg-yellow-400 rounded-md text-black'>
+                         <Link 
+                            to="/profile" 
+                            className={isActive('/profile')}>
+                            Profile
+                        </Link>
+                    </button>}
+
                 </div>
             }
             <div className='flex justify-between mt-4 px-4 py-2 lg:h-24 lg:flex lg:items-center lg:justify-between lg:px-28 lg:pt-16 lg:text-xl'>
@@ -79,18 +91,26 @@ const Navbar = ({ onLoginClick, onSignUpClick }) => {
                     </div>
                 </div>
                 <div className='hidden lg:flex lg:items-center lg:gap-10'>
-                    <button 
+                    {!currentUser && <button 
                         className='text-white' 
                         onClick={onLoginClick}
                     >
                         Sign In
-                    </button>
-                    <button 
+                    </button>}
+                    {!currentUser && <button 
                         className='p-3 bg-yellow-400 text-black rounded-md' 
                         onClick={onSignUpClick}
                     >
                         Sign Up
-                    </button>
+                    </button>}
+                    {currentUser && <button className='p-3 bg-yellow-400 rounded-md text-black'>
+                         <Link 
+                            to="/profile" 
+                            className={isActive('/profile')}>
+                            Profile
+                        </Link>
+                    </button>}
+
                 </div>
                 <button 
                     className='flex text-4xl pr-8 items-center z-10 text-white lg:hidden' 

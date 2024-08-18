@@ -3,6 +3,8 @@ import authRoute from "./routes/auth.route.js";
 import cookieParser from "cookie-parser";
 import dotenv from "dotenv";
 import cors from "cors"
+import testRoute from "./routes/test.route.js"
+import userRoute from "./routes/user.route.js"
 
 dotenv.config();
 
@@ -13,6 +15,8 @@ app.use(express.json());
 app.use(cors({origin:process.env.CLIENT_URL, credentials:true}))
 
 app.use("/api/auth", authRoute);
+app.use("/api/test", testRoute);
+app.use("/api/user", userRoute);
 
 // Error handling middleware
 app.use((err, req, res, next) => {

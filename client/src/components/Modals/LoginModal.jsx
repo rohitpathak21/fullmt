@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useContext } from "react";
 import { useForm } from "react-hook-form";
 import axios from "axios";
 import { FcGoogle } from "react-icons/fc";
@@ -7,8 +7,15 @@ import Heading from "../Heading";
 import Input from "../Input";
 import toast from "react-hot-toast";
 import Button from "../Button";
+import { useNavigate } from "react-router-dom";
+import { AuthContext } from "../../context/AuthContext";
 
 const LoginModal = ({ isOpen, onClose, onSignUp }) => {
+
+  const navigate = useNavigate();
+
+  const {updateUser} = useContext(AuthContext)
+
   const {
     register,
     handleSubmit,
@@ -26,10 +33,10 @@ const LoginModal = ({ isOpen, onClose, onSignUp }) => {
         withCredentials: true, // Include credentials to handle cookies
       });
 
+      updateUser(response.data) // Save to local storage
       toast.success("Login successful!");
-      console.log(response.data);
       onClose(); // Close the modal on successful login
-      // Redirect user or handle login success
+      navigate("/"); // Navigate to home page
     } catch (error) {
       if (error.response && error.response.data) {
         toast.error(error.response.data.message || "Login failed. Please try again.");

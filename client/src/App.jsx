@@ -10,12 +10,14 @@ import About from "./pages/about";
 import Contact from "./pages/contact";
 import Profile from "./pages/profile";
 import Home from "./pages/home" // Assuming you create a Profile page
+import UpdateProfile from "./components/Modals/UpdateProfile";
 
 const App = () => {
   const [isLoginOpen, setIsLoginOpen] = useState(false);
   const [isRegisterOpen, setIsRegisterOpen] = useState(false);
   const [isRoleSignUpOpen, setIsRoleSignUpOpen] = useState(false);
   const [isRoleLoginOpen, setIsRoleLoginOpen] = useState(false);
+  const [isUpdateOpen, setIsUpdateOpen] = useState(false);
 
   const openLoginModal = () => {
     setIsLoginOpen(true);
@@ -36,6 +38,7 @@ const App = () => {
     setIsRegisterOpen(false);
     setIsRoleSignUpOpen(false);
     setIsRoleLoginOpen(false);
+    setIsUpdateOpen(false);
   };
 
   const openRoleSignUpModal = () => {
@@ -52,6 +55,10 @@ const App = () => {
     setIsRoleSignUpOpen(false);
   }
 
+  const openUpdateModal =() => {
+    setIsUpdateOpen(true);
+  }
+
   return (
     <Router>
       <Navbar
@@ -66,7 +73,7 @@ const App = () => {
         />
         <Route path="/about" element={<About />} />
         <Route path="/contact" element={<Contact />} />
-        <Route path="/profile" element={<Profile />} />
+        <Route path="/profile" element={<Profile openUpdateModal={openUpdateModal}/>}/>
       </Routes>
 
       <LoginModal 
@@ -88,6 +95,11 @@ const App = () => {
       isOpen={isRoleLoginOpen}
       onClose={closeModals}
       onStudentSelect={openLoginModal}/>
+
+      <UpdateProfile
+      isOpen={isUpdateOpen}
+      onClose={closeModals}
+      />
 
       <Toaster/>
     </Router>
