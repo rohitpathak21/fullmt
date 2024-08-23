@@ -1,7 +1,7 @@
-import React, { useContext } from "react";
+import { React } from "react";
 import { useForm } from "react-hook-form";
 import axios from "axios";
-import { AuthContext } from '../../context/AuthContext';
+import { FcGoogle } from "react-icons/fc";
 import Modal from "./Modals";
 import Heading from "../Heading";
 import Input from "../Input";
@@ -20,48 +20,31 @@ const capitalizeFirstLetter = (str) => {
   return str.charAt(0).toUpperCase() + str.slice(1).toLowerCase();
 };
 
-const UpdateProfile = ({ isOpen, onClose }) => {
-  const { currentUser, updateUser, getRole } = useContext(AuthContext); // Get currentUser and getRole from context
-
+const RegisterModal = ({ isOpen, onClose, onLogin }) => {
   const {
     register,
     handleSubmit,
     formState: { errors, isSubmitting },
-  } = useForm({
-    defaultValues: {
-      fullname: currentUser?.fullname || "",
-      email: currentUser?.email || "",
-      gender: currentUser?.gender || "",
-      age: currentUser?.age || "",
-      phone: currentUser?.phone || "",
-    },
-  });
+  } = useForm();
 
   const onSubmit = async (data) => {
-    // Normalize data
+    // Normalize email to lowercase and capitalize first letter of gender
     const normalizedData = {
       ...data,
       email: data.email.toLowerCase().trim(),
       gender: capitalizeFirstLetter(data.gender),
-      fullname: capitalizeWords(data.fullname),
+      fullname: capitalizeWords(data.fullname), // Capitalize each word in the name
     };
 
-    // Determine endpoint based on role
-    const role = getRole();
-    const endpoint = role === "Teacher"
-    ? `http://localhost:8800/api/teacher/${currentUser.id}`
-    : `http://localhost:8800/api/user/${currentUser.id}`;
-
     try {
-      const response = await axios.put(endpoint, normalizedData, {
-        withCredentials: true, // If using cookies for authentication
-      });
-      toast.success("Profile updated successfully!");
-
-      // Update the context with the new user data
-      updateUser(response.data);
-
-      onClose();
+      console.log(normalizedData);
+      const response = await axios.post("http://localhost:8800/api/teacherauth/register", normalizedData);
+      if (response.status === 201) { // Check for successful registration
+        toast.success("Teacher registration successful! Please check your email for verification.");
+        onLogin();// Call the onLogin callback only on successful registration
+      } else {
+        toast.error("Something went wrong!"); // Handle unexpected response statuses
+      }
     } catch (error) {
       console.error("Error response:", error.response);
       if (
@@ -78,9 +61,23 @@ const UpdateProfile = ({ isOpen, onClose }) => {
 
   const bodyContent = (
     <div className="flex flex-col gap-4">
-      <Heading center title="Update Your Profile" subtitle="Make changes to your account" />
-      
+      <Heading center title="Welcome to myTutor" subtitle="Create an account" />
       <div className="flex flex-col md:flex-row gap-4">
+        <Input
+          id="email"
+          label="Email"
+          type="text"
+          disabled={isSubmitting}
+          {...register("email", {
+            required: "Email is required",
+            pattern: {
+              value: /^\s*[^\s@]+@[^\s@]+\.[^\s@]+\s*$/,
+              message: "Invalid email address",
+            },
+          })}
+          error={errors.email?.message}
+        />
+
         <Input
           id="fullname"
           label="Name"
@@ -94,21 +91,6 @@ const UpdateProfile = ({ isOpen, onClose }) => {
             },
           })}
           error={errors.fullname?.message}
-        />
-
-        <Input
-          id="email"
-          label="Email"
-          type="email"
-          disabled={isSubmitting}
-          {...register("email", {
-            required: "Email is required",
-            pattern: {
-              value: /^\s*[^\s@]+@[^\s@]+\.[^\s@]+\s*$/,
-              message: "Invalid email address",
-            },
-          })}
-          error={errors.email?.message}
         />
       </div>
 
@@ -130,7 +112,6 @@ const UpdateProfile = ({ isOpen, onClose }) => {
           })}
           error={errors.gender?.message}
         />
-
         <Input
           id="age"
           label="Age"
@@ -167,18 +148,49 @@ const UpdateProfile = ({ isOpen, onClose }) => {
           })}
           error={errors.phone?.message}
         />
+        <Input
+          id="password"
+          label="Password"
+          type="password"
+          disabled={isSubmitting}
+          {...register("password", {
+            required: "Password is required",
+            minLength: {
+              value: 6,
+              message: "Password must be at least 6 characters long",
+            },
+            pattern: {
+              value: /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&]).+$/, // At least one uppercase, one lowercase, one number, and one special character
+              message:
+                "Password must include uppercase, lowercase letters, a number, and a special character",
+            },
+          })}
+          error={errors.password?.message}
+        />
       </div>
     </div>
   );
 
   const footerContent = (
     <div className="mt-3">
+      <hr />
       <Button
         outline
-        label="Cancel"
-        onClick={onClose}
-        disabled={isSubmitting}
+        label="Continue with Google"
+        icon={FcGoogle}
+        onClick={() => toast.error("Google Sign-In not implemented yet!")}
       />
+      <div className="text-neutral-500 text-center mt-4 font-light">
+        <div className="flex flex-row justify-center items-center gap-2">
+          <div>Already have an account?</div>
+          <div
+            className="text-black cursor-pointer hover:underline"
+            onClick={onLogin} // Switch to LoginModal
+          >
+            Log in
+          </div>
+        </div>
+      </div>
     </div>
   );
 
@@ -186,8 +198,8 @@ const UpdateProfile = ({ isOpen, onClose }) => {
     <Modal
       disabled={isSubmitting}
       isOpen={isOpen}
-      title="Update Profile"
-      actionLabel="Save Changes"
+      title="Register"
+      actionLabel="Continue"
       onClose={onClose}
       onSubmit={handleSubmit(onSubmit)} // Use handleSubmit from react-hook-form
       body={bodyContent}
@@ -196,4 +208,4 @@ const UpdateProfile = ({ isOpen, onClose }) => {
   );
 };
 
-export default UpdateProfile;
+export default RegisterModal;

@@ -5,6 +5,8 @@ import dotenv from "dotenv";
 import cors from "cors"
 import testRoute from "./routes/test.route.js"
 import userRoute from "./routes/user.route.js"
+import teacherauthRoute from "./routes/teacherauth.route.js"
+import teacherRoute from "./routes/teacher.route.js"
 
 dotenv.config();
 
@@ -17,6 +19,8 @@ app.use(cors({origin:process.env.CLIENT_URL, credentials:true}))
 app.use("/api/auth", authRoute);
 app.use("/api/test", testRoute);
 app.use("/api/user", userRoute);
+app.use("/api/teacherauth", teacherauthRoute);
+app.use("/api/teacher", teacherRoute);
 
 // Error handling middleware
 app.use((err, req, res, next) => {

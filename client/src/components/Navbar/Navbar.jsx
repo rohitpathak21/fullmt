@@ -2,18 +2,20 @@ import React, { useContext, useState } from 'react';
 import { IoMenu } from 'react-icons/io5';
 import { Link, useLocation } from 'react-router-dom';
 import { AuthContext } from '../../context/AuthContext';
+import { FaSearch } from 'react-icons/fa';
 
 const Navbar = ({ onLoginClick, onSignUpClick }) => {
     const [toggle, setToggle] = useState(false);
-    const location = useLocation(); // Get current location
-
-    const {currentUser} = useContext(AuthContext)
-    console.log(currentUser);
+    const location = useLocation();
+    const { currentUser } = useContext(AuthContext);
 
     // Helper function to determine if a link is active
     const isActive = (path) => location.pathname === path 
         ? 'p-3 bg-yellow-400 text-black rounded-md' 
         : 'text-white';
+
+    // Determine the text for the Feed button based on user role
+    const feedButtonText = currentUser?.role === 'Teacher' ? 'Find Students' : 'Find Teachers';
 
     return (
         <>
@@ -40,7 +42,15 @@ const Navbar = ({ onLoginClick, onSignUpClick }) => {
                     >
                         Contact Us
                     </Link>
-                    {currentUser==null && <button 
+                    {currentUser && <Link 
+                        to="/feed" 
+                        className={`flex items-center space-x-2 p-2 rounded ${isActive('/feed')}`}
+                        onClick={() => setToggle(false)}
+                    >
+                        <span>{feedButtonText}</span>
+                        <FaSearch />
+                    </Link>}
+                    {!currentUser && <button 
                         className='text-white' 
                         onClick={() => { onLoginClick(); setToggle(false); }}
                     >
@@ -53,13 +63,12 @@ const Navbar = ({ onLoginClick, onSignUpClick }) => {
                         Sign Up
                     </button>}
                     {currentUser && <button className='p-3 bg-yellow-400 rounded-md text-black'>
-                         <Link 
+                        <Link 
                             to="/profile" 
                             className={isActive('/profile')}>
                             Profile
                         </Link>
                     </button>}
-
                 </div>
             }
             <div className='flex justify-between mt-4 px-4 py-2 lg:h-24 lg:flex lg:items-center lg:justify-between lg:px-28 lg:pt-16 lg:text-xl'>
@@ -88,6 +97,13 @@ const Navbar = ({ onLoginClick, onSignUpClick }) => {
                         >
                             Contact Us
                         </Link>
+                        {currentUser && <Link 
+                            to="/feed" 
+                            className={`flex items-center space-x-2 p-2 rounded ${isActive('/feed')}`}
+                        >
+                            <span>{feedButtonText}</span>
+                            <FaSearch />
+                        </Link>}
                     </div>
                 </div>
                 <div className='hidden lg:flex lg:items-center lg:gap-10'>
@@ -104,13 +120,12 @@ const Navbar = ({ onLoginClick, onSignUpClick }) => {
                         Sign Up
                     </button>}
                     {currentUser && <button className='p-3 bg-yellow-400 rounded-md text-black'>
-                         <Link 
+                        <Link 
                             to="/profile" 
                             className={isActive('/profile')}>
                             Profile
                         </Link>
                     </button>}
-
                 </div>
                 <button 
                     className='flex text-4xl pr-8 items-center z-10 text-white lg:hidden' 
