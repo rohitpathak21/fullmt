@@ -175,3 +175,49 @@ export const updateTeachingInfo = async (req, res) => {
         res.status(500).json({ message: "Failed to update teaching details" });
     }
 };
+
+export const getTeachersForStudents = async (req, res) => {
+    try {
+        // Fetch all teachers from the database
+        const teachers = await prisma.teacher.findMany({
+            select: {
+                fullname: true,
+                age: true,
+                gender: true,
+                qualification: true,
+                subject: true,
+                area: true,
+                city: true
+            }
+        });
+
+        res.status(200).json(teachers);
+    } catch (err) {
+        console.error("Error fetching teachers:", err);
+        res.status(500).json({ message: "Failed to fetch teachers" });
+    }
+};
+
+export const getUsersForTeachers = async (req, res) => {
+    try {
+        // Fetch all users from the database
+        const users = await prisma.user.findMany({
+            select: {
+                fullname: true,
+                age: true,
+                gender: true,
+                class: true,
+                school: true,
+                subject: true,
+                preference: true,
+                area: true,
+                city: true
+            }
+        });
+
+        res.status(200).json(users);
+    } catch (err) {
+        console.error("Error fetching users:", err);
+        res.status(500).json({ message: "Failed to fetch users" });
+    }
+};
