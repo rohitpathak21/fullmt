@@ -119,7 +119,7 @@ const App = () => {
 
       <Routes>
         <Route path="/" element={<Home />} />
-        <Route path="/about" element={<About />} />
+        <Route path="/about" element={<About openRegisterModal={openRegisterModal}/>} />
         <Route path="/contact" element={<Contact />} />
         <Route path="/profile" element={<Profile openUpdateModal={openUpdateModal} openUpdateAddressModal={openUpdateAddressModal} openUpdateAcadInfo={openUpdateAcadInfo} openUpdateTeachingLocation={openUpdateTeachingLocation} openUpdateTeachingInfo={openUpdateTeachingInfo} />} />
         <Route path="/feed" element={<Feed />} /> {/* Add Feed route */}

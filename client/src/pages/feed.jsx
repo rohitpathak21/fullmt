@@ -49,7 +49,7 @@ const Feed = () => {
 
 const Card = ({ item, role }) => {
   return (
-    <div className="bg-white shadow-md p-4 rounded-lg">
+    <div className="mt-16 ml-20 bg-white shadow-md p-8 rounded-lg flex flex-col gap-2">
       <h2 className="text-xl font-bold">{item.fullname}</h2>
       <p>Age: {item.age}</p>
       <p>Gender: {item.gender}</p>

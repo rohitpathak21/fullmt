@@ -1,12 +1,12 @@
 import React from 'react'
 
 
-const about = () => {
+const about = ({openRegisterModal}) => {
   return (
     <div>
-    <div className='flex flex-col gap-6 md:flex'>
+    <div className='flex flex-col gap-6 md:flex mx-20 mb-10'>
 
-      <div className='text-center'> 
+      <div className='text-center text-white'> 
         <h1 className='text-3xl font-bold mt-[80px] md:text-[35px]'> Welcome to myTutor</h1>
         <p className='text-lg font-normal mt-2 md:text-[20px] md:mt-4'>At myTutor, we're passionate about connecting individuals with the resources they need to thrive. Out platform was born of a simple realization: finding a qualified tutor nearby for a specific task shouldn't be a daunting task.</p>
       </div>
@@ -65,7 +65,7 @@ const about = () => {
           <div className='md:col-span-10 md:-order-1'>
            <h1 className='text-2xl text-center font-serif font-semibold md:text-[35px]'>Join Us</h1>
            <p className='mt-2 text-base text-center font-serif md:font-normal md:mt-4 md:text-[18px]'>Ready to embark on your learning journey? Sign up for myTutor today and start connecting with tutors who can help you achieve your goals.</p>
-           <div className='flex justify-center'><button className='content-center p-3 mt-4 min-w-[100px] cursor-pointer rounded-lg bg-sky-600 hover:bg-sky-400 md:min-w-[120px]'>Register</button></div>
+           <div className='flex justify-center'><button className='content-center p-3 mt-4 min-w-[100px] cursor-pointer rounded-lg bg-sky-600 hover:bg-sky-400 md:min-w-[120px]'onClick={openRegisterModal}>Register</button></div>
           </div>
       </div>
 
