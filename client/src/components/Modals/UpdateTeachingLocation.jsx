@@ -25,7 +25,7 @@ const UpdateTeachingLocation = ({ isOpen, onClose }) => {
   const onSubmit = async (data) => {
     try {
       const response = await axios.put(
-        `http://localhost:8800/api/teacher/teachinglocation/${currentUser.id}`,
+        `${import.meta.env.VITE_BASE_URL}/api/teacher/teachinglocation/${currentUser.id}`,
         data,
         { withCredentials: true }
       );

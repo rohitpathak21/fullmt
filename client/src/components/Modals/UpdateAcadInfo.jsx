@@ -28,7 +28,7 @@ const UpdateAcadInfo = ({ isOpen, onClose }) => {
   const onSubmit = async (data) => {
     try {
       const response = await axios.put(
-        `http://localhost:8800/api/user/academicinfo/${currentUser.id}`,
+        `${import.meta.env.VITE_BASE_URL}/api/user/academicinfo/${currentUser.id}`,
         data,
         { withCredentials: true }
       );

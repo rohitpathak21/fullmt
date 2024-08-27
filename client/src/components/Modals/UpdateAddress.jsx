@@ -40,8 +40,8 @@ const UpdateAddressModal = ({ isOpen, onClose }) => {
     // Determine endpoint based on role
     const role = getRole();
     const endpoint = role === "Teacher"
-      ? `http://localhost:8800/api/teacher/address/${currentUser.id}`
-      : `http://localhost:8800/api/user/address/${currentUser.id}`;
+    ? `${import.meta.env.VITE_BASE_URL}/api/teacher/address/${currentUser.id}`
+    : `${import.meta.env.VITE_BASE_URL}/api/user/address/${currentUser.id}`;
   
     try {
       const response = await axios.put(endpoint, normalizedData, {

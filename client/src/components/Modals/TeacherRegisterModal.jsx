@@ -38,7 +38,7 @@ const RegisterModal = ({ isOpen, onClose, onLogin }) => {
 
     try {
       console.log(normalizedData);
-      const response = await axios.post("http://localhost:8800/api/teacherauth/register", normalizedData);
+      const response = await axios.post(`${import.meta.env.VITE_BASE_URL}/api/teacherauth/register`, normalizedData);
       if (response.status === 201) { // Check for successful registration
         toast.success("Teacher registration successful! Please check your email for verification.");
         onLogin();// Call the onLogin callback only on successful registration

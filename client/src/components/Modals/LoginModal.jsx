@@ -29,7 +29,7 @@ const LoginModal = ({ isOpen, onClose, onSignUp }) => {
     };
 
     try {
-      const response = await axios.post("http://localhost:8800/api/auth/login", sanitizedData, {
+      const response = await axios.post(`${import.meta.env.VITE_BASE_URL}/api/auth/login`, sanitizedData, {
         withCredentials: true, // Include credentials to handle cookies
       });
 

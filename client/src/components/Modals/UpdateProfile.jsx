@@ -49,8 +49,8 @@ const UpdateProfile = ({ isOpen, onClose }) => {
     // Determine endpoint based on role
     const role = getRole();
     const endpoint = role === "Teacher"
-    ? `http://localhost:8800/api/teacher/${currentUser.id}`
-    : `http://localhost:8800/api/user/${currentUser.id}`;
+    ? `${import.meta.env.VITE_BASE_URL}/api/teacher/${currentUser.id}`
+    : `${import.meta.env.VITE_BASE_URL}/api/user/${currentUser.id}`;
 
     try {
       const response = await axios.put(endpoint, normalizedData, {

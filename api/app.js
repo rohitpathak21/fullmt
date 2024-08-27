@@ -7,14 +7,34 @@ import testRoute from "./routes/test.route.js"
 import userRoute from "./routes/user.route.js"
 import teacherauthRoute from "./routes/teacherauth.route.js"
 import teacherRoute from "./routes/teacher.route.js"
+import helmet from "helmet"
+import rateLimit from "express-rate-limit";
 
 dotenv.config();
 
 const app = express();
 
+app.use(helmet());
+
+
+const limiter = rateLimit({
+  windowMs: 15 * 60 * 1000, // 15 minutes
+  max: 100, // limit each IP to 100 requests per windowMs
+  message: "Too many requests from this IP, please try again later."
+});
+
+app.use(limiter);
+
 app.use(cookieParser());
 app.use(express.json());
-app.use(cors({origin:process.env.CLIENT_URL, credentials:true}))
+const corsOptions = {
+  origin: process.env.CLIENT_URL, // Only allow requests from your frontend domain
+  credentials: true, // Enable CORS with credentials
+  optionsSuccessStatus: 200 // For legacy browser support
+};
+
+app.use(cors(corsOptions));
+
 
 app.use("/api/auth", authRoute);
 app.use("/api/test", testRoute);

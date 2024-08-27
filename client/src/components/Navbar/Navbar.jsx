@@ -15,7 +15,7 @@ const Navbar = ({ onLoginClick, onSignUpClick }) => {
         : 'text-white';
 
     // Determine the text for the Feed button based on user role
-    const feedButtonText = currentUser?.role === 'Teacher' ? 'Find Students' : 'Find Teachers';
+    const feedButtonText = currentUser?.role === 'Teacher' ? 'Find Students' : 'Find Tutors';
 
     return (
         <>

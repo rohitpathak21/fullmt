@@ -28,7 +28,7 @@ const TeacherLoginModal = ({ isOpen, onClose, onSignUp }) => {
     };
 
     try {
-      const response = await axios.post("http://localhost:8800/api/teacherauth/login", sanitizedData, {
+      const response = await axios.post(`${import.meta.env.VITE_BASE_URL}/api/teacherauth/login`, sanitizedData, {
         withCredentials: true, // Include credentials to handle cookies
       });
 

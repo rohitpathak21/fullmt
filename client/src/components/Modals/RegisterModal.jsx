@@ -38,7 +38,7 @@ const RegisterModal = ({ isOpen, onClose, onLogin }) => {
 
     try {
       console.log(normalizedData);
-      await axios.post("http://localhost:8800/api/auth/register", normalizedData);
+      await axios.post(`${import.meta.env.VITE_BASE_URL}/api/auth/register`, normalizedData);
       toast.success("Registration successful! Please check your email for verification.");
       onLogin();
     } catch (error) {

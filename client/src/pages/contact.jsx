@@ -53,7 +53,7 @@ const Contact = () => {
   };
 
   return (
-    <div className='text-white antialiased flex w-full h-[calc(100% - 196px)] mt-16 justify-between px-28'>
+    <div className='text-white antialiased flex flex-col md:flex md:flex-row w-full h-[calc(100% - 196px)] mt-6 md:mt-16 justify-between md:px-28 px-10'>
       <div className='flex-1'>
         <div className='flex flex-col h-full justify-around gap-10 py-8 pr-6'>
           <div className='flex flex-col gap-5'>
@@ -64,15 +64,15 @@ const Contact = () => {
           <div className='flex flex-col gap-5 text-lg'>
             <div className='inline-flex space-x-3 items-center'>
               <IoCall className='text-2xl'/>
-              <span>+123-456-789</span>
+              <span>+91-7905848321</span>
             </div>
             <div className='inline-flex space-x-2 items-center'>
               <IoMdMail className='text-2xl'/>
-              <span>contactmytutor@gmail.com</span>
+              <span>connectatmytutor@gmail.com</span>
             </div>
             <div className='inline-flex space-x-2 items-center'>
               <FaLocationDot className='text-2xl'/>
-              <span>11, Infinity Tower, Lucknow, Uttar Pradesh</span>
+              <span>516/11, Shivaji Nagar, Lucknow</span>
             </div>
           </div>
 
@@ -86,11 +86,11 @@ const Contact = () => {
       </div>
 
       <div className='flex-1'>
-        <form className='flex flex-col h-full justify-between pt-8 pl-20 gap-2 font-semibold' onSubmit={onSubmit}>
+        <form className='flex flex-col h-full justify-between pt-8 pl-0 md:pl-20 gap-2 font-semibold' onSubmit={onSubmit}>
           <input type="text" placeholder='Full Name' name='name' className='bg-[#2d2b42] p-4 border-none rounded-md'/>
           <input type="text" placeholder='Email' name='email' className='bg-[#2d2b42] p-4 border-none rounded-md'/>
           <textarea name="message" cols="20" rows="10" placeholder='Message' className='bg-[#2d2b42] p-4 border-none rounded-md'></textarea>
-          <button type="submit" className='w-full p-5 cursor-pointer bg-blue-600 border-none rounded-lg hover:bg-blue-400'>Send</button>
+          <button type="submit" className='w-full p-5 mt-4 mb-8 cursor-pointer bg-blue-600 border-none rounded-lg hover:bg-blue-400'>Send</button>
         </form>
       </div>
     </div>
