@@ -28,9 +28,9 @@ app.use(limiter);
 app.use(cookieParser());
 app.use(express.json());
 const corsOptions = {
-  origin: process.env.CLIENT_URL, // Only allow requests from your frontend domain
-  credentials: true, // Enable CORS with credentials
-  optionsSuccessStatus: 200 // For legacy browser support
+  origin: "*", // Allow all origins (for testing purposes only)
+  credentials: true,
+  optionsSuccessStatus: 200,
 };
 
 app.use(cors(corsOptions));
