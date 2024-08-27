@@ -7,8 +7,8 @@ import toast from 'react-hot-toast';
 // Shared Profile Content Component
 const PersonalInformation = ({ currentUser, openUpdateModal, openUpdateAddressModal }) => (
   <>
-    <div className="w-full mt-20">
-      <div className="m-6 p-6 bg-white flex flex-col gap-2 rounded-md">
+    <div className="w-full mt-20 md:px-20">
+      <div className="m-6 p-6 bg-white flex flex-col gap-2 rounded-md md:px-16">
         <div className="h-20 w-20 rounded-full flex justify-center items-center mx-auto relative bottom-16">
           <img src="/placeholder.png" alt="" className="rounded-full" />
         </div>
@@ -25,8 +25,8 @@ const PersonalInformation = ({ currentUser, openUpdateModal, openUpdateAddressMo
         </div>
       </div>
     </div>
-    <div className="w-full mt-6">
-      <div className="m-6 p-6 bg-white flex flex-col gap-2 rounded-md">
+    <div className="w-full mt-6 md:px-20">
+      <div className="m-6 p-6 bg-white flex flex-col gap-2 rounded-md md:px-16">
         <h1 className="text-center text-xl">Address Information</h1>
         <div className="flex flex-col gap-2 mt-5">
           <p><span className="font-semibold">Street :</span> {currentUser.street || " Not Updated Yet"}</p>
@@ -47,8 +47,8 @@ const StudentProfilePage = ({ currentUser, openUpdateModal, openUpdateAddressMod
   <div>
     <PersonalInformation currentUser={currentUser} openUpdateModal={openUpdateModal} openUpdateAddressModal={openUpdateAddressModal} />
 
-    <div className="w-full mt-6">
-      <div className="m-6 p-6 bg-white flex flex-col gap-2 rounded-md">
+    <div className="w-full mt-6 md:px-20">
+      <div className="m-6 p-6 bg-white flex flex-col gap-2 rounded-md md:px-16">
         <h1 className="text-center text-xl">Academic Information</h1>
         <div className="flex flex-col gap-2 mt-5">
           <p><span className="font-semibold">Class :</span> {currentUser.class || " Not Updated Yet"}</p>
@@ -72,8 +72,8 @@ const StudentProfilePage = ({ currentUser, openUpdateModal, openUpdateAddressMod
 const TeacherProfilePage = ({ currentUser, openUpdateModal, openUpdateAddressModal, handleLogout, openUpdateTeachingLocation, openUpdateTeachingInfo }) => (
   <div className="teacher-profile-page">
     <PersonalInformation currentUser={currentUser} openUpdateModal={openUpdateModal} openUpdateAddressModal={openUpdateAddressModal} />
-    <div className="w-full mt-6">
-      <div className="m-6 p-6 bg-white flex flex-col gap-2 rounded-md">
+    <div className="w-full mt-6 md:px-20">
+      <div className="m-6 p-6 bg-white flex flex-col gap-2 rounded-md md:px-16">
         <h1 className="text-center text-xl">Teaching Information</h1>
         <div className="flex flex-col gap-2 mt-5">
           <p><span className="font-semibold">Highest Qualification :</span> {currentUser.qualification || " Not Updated Yet"}</p>
@@ -84,8 +84,8 @@ const TeacherProfilePage = ({ currentUser, openUpdateModal, openUpdateAddressMod
         </div>
       </div>
     </div>
-    <div className="w-full mt-6">
-      <div className="m-6 p-6 bg-white flex flex-col gap-2 rounded-md">
+    <div className="w-full mt-6 md:px-20">
+      <div className="m-6 p-6 bg-white flex flex-col gap-2 rounded-md md:px-16">
         <h1 className="text-center text-xl">Teaching Location</h1>
         <div className="flex flex-col gap-2 mt-5">
           <p><span className="font-semibold">Preferred Area :</span> {currentUser.preferredarea || " Not Updated Yet"}</p>
