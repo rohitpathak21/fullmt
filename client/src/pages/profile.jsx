@@ -116,10 +116,9 @@ const Profile = ({ openUpdateModal, openUpdateAddressModal, openUpdateAcadInfo, 
 
   const handleLogout = async () => {
     try {
-      const res = await axios.post(`${import.meta.env.VITE_BASE_URL}/api/auth/logout`
-, null, {
-        withCredentials: true,
-      });
+      const res = await (`${import.meta.env.VITE_BASE_URL}/api/auth/logout`, null, {
+  withCredentials: true,
+});
 
       if (res.status === 200) {
         updateUser(null); // Remove user info from context and local storage
