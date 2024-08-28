@@ -114,22 +114,23 @@ const Profile = ({ openUpdateModal, openUpdateAddressModal, openUpdateAcadInfo, 
     }
   }, [currentUser, navigate]);
 
-  const handleLogout = async () => {
-    try {
-      const res = await (`${import.meta.env.VITE_BASE_URL}/api/auth/logout`, null, {
-  withCredentials: true,
-});
+ const handleLogout = async () => {
+  try {
+    const res = await axios.post(`${import.meta.env.VITE_BASE_URL}/api/auth/logout`, null, {
+      withCredentials: true,
+    });
 
-      if (res.status === 200) {
-        updateUser(null); // Remove user info from context and local storage
-        toast.success("Logout successful!");
-        navigate('/'); // Redirect to home page
-      }
-    } catch (error) {
-      toast.error("Failed to logout. Please try again.");
-      console.error("Logout error:", error);
+    if (res.status === 200) {
+      updateUser(null); // Remove user info from context and local storage
+      toast.success("Logout successful!");
+      navigate('/'); // Redirect to home page
     }
-  };
+  } catch (error) {
+    toast.error("Failed to logout. Please try again.");
+    console.error("Logout error:", error);
+  }
+};
+
 
   if (!currentUser) {
     return null; // Render nothing if the user is not logged in
