@@ -14,8 +14,8 @@ const Feed = () => {
       try {
         const role = getRole();
         const url = role === 'student'
-          ? 'http://localhost:8800/api/teacher/teachers'
-          : 'http://localhost:8800/api/teacher/users';
+          ? `${import.meta.env.VITE_BASE_URL}/api/teacher/teachers`
+          : `${import.meta.env.VITE_BASE_URL}/api/teacher/users`;
 
         // Fetch data with credentials
         const response = await axios.get(url, { withCredentials: true });
