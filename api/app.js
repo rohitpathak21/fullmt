@@ -28,13 +28,13 @@ app.use(limiter);
 app.use(cookieParser());
 app.use(express.json());
 const corsOptions = {
-  origin: "*", // Allow all origins (for testing purposes only)
-  credentials: true,
-  optionsSuccessStatus: 200,
+  origin: process.env.CLIENT_URL, // Replace with your actual client URL
+  credentials: true, // This allows credentials to be sent along with the request
+  optionsSuccessStatus: 200
 };
 
 app.use(cors(corsOptions));
-app.options('*', cors(corsOptions)); 
+
 
 
 app.use("/api/auth", authRoute);
