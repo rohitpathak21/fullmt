@@ -116,7 +116,8 @@ const Profile = ({ openUpdateModal, openUpdateAddressModal, openUpdateAcadInfo, 
 
   const handleLogout = async () => {
     try {
-      const res = await axios.post("http://localhost:8800/api/auth/logout", null, {
+      const res = await axios.post(`${import.meta.env.VITE_BASE_URL}/api/auth/logout`
+, null, {
         withCredentials: true,
       });
 
