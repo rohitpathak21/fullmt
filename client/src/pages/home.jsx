@@ -1,10 +1,11 @@
 import React from 'react'
 import { useNavigate } from 'react-router-dom';
+import { AuthContext } from '../context/AuthContext';
 
 const Home = ({openRegisterModal}) => {
 
   const navigate =useNavigate();
-
+  const { currentUser } = useContext(AuthContext);
   const handleLearnMore = () =>{
     navigate('/about');
   } 
@@ -22,7 +23,7 @@ const Home = ({openRegisterModal}) => {
         </div>
         <div className='flex gap-10 pt-6 font-medium mx-auto md:mx-0'>
         <button className='p-5 min-w-[120px] cursor-pointer border-none rounded-lg bg-white text-blue-950' onClick={handleLearnMore}>Learn More</button>
-        <button className='p-5 min-w-[120px] cursor-pointer border-none rounded-lg bg-sky-600 hover:bg-sky-400' onClick={openRegisterModal} >Register</button>
+        {!currentUser && <button className='p-5 min-w-[120px] cursor-pointer border-none rounded-lg bg-sky-600 hover:bg-sky-400' onClick={openRegisterModal} >Register</button>}
         
         </div> 
       </div>
