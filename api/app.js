@@ -28,7 +28,7 @@ app.use(limiter);
 app.use(cookieParser());
 app.use(express.json());
 const corsOptions = {
-  origin: process.env.CLIENT_URL, // Replace with your actual client URL
+  origin:[process.env.CLIENT_URL, "https://www.mytutor.study"], // Replace with your actual client URL
   credentials: true, // This allows credentials to be sent along with the request
   optionsSuccessStatus: 200
 };
