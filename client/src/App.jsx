@@ -118,8 +118,8 @@ const App = () => {
       />
 
       <Routes>
-        <Route path="/" element={<Home openRegisterModal={openRoleSignUpModal }/>} />
-        <Route path="/about" element={<About openRegisterModal={openRegisterModal}/>} />
+        <Route path="/" element={<Home openRoleSignUpModal={openRoleSignUpModal}/>} />
+        <Route path="/about" element={<About  openRoleSignUpModal={openRoleSignUpModal}/>} />
         <Route path="/contact" element={<Contact />} />
         <Route path="/profile" element={<Profile openUpdateModal={openUpdateModal} openUpdateAddressModal={openUpdateAddressModal} openUpdateAcadInfo={openUpdateAcadInfo} openUpdateTeachingLocation={openUpdateTeachingLocation} openUpdateTeachingInfo={openUpdateTeachingInfo} />} />
         <Route path="/feed" element={<Feed />} /> {/* Add Feed route */}
