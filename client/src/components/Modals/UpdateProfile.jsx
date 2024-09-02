@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import axios from "axios";
 import { AuthContext } from '../../context/AuthContext';
@@ -21,24 +21,37 @@ const capitalizeFirstLetter = (str) => {
 };
 
 const UpdateProfile = ({ isOpen, onClose }) => {
-  const { currentUser, updateUser, getRole } = useContext(AuthContext); // Get currentUser and getRole from context
+  const { currentUser, updateUser, getRole } = useContext(AuthContext);
 
   const {
     register,
     handleSubmit,
     formState: { errors, isSubmitting },
+    reset, // Add reset method
   } = useForm({
     defaultValues: {
-      fullname: currentUser?.fullname || "",
-      email: currentUser?.email || "",
-      gender: currentUser?.gender || "",
-      age: currentUser?.age || "",
-      phone: currentUser?.phone || "",
+      fullname: "",
+      email: "",
+      gender: "",
+      age: "",
+      phone: "",
     },
   });
 
+  // Use useEffect to set the default values when currentUser is available
+  useEffect(() => {
+    if (currentUser) {
+      reset({
+        fullname: currentUser.fullname || "",
+        email: currentUser.email || "",
+        gender: currentUser.gender || "",
+        age: currentUser.age || "",
+        phone: currentUser.phone || "",
+      });
+    }
+  }, [currentUser, reset]); // Dependency array includes currentUser and reset
+
   const onSubmit = async (data) => {
-    // Normalize data
     const normalizedData = {
       ...data,
       email: data.email.toLowerCase().trim(),
@@ -46,29 +59,21 @@ const UpdateProfile = ({ isOpen, onClose }) => {
       fullname: capitalizeWords(data.fullname),
     };
 
-    // Determine endpoint based on role
     const role = getRole();
     const endpoint = role === "Teacher"
-    ? `${import.meta.env.VITE_BASE_URL}/api/teacher/${currentUser.id}`
-    : `${import.meta.env.VITE_BASE_URL}/api/user/${currentUser.id}`;
+      ? `${import.meta.env.VITE_BASE_URL}/api/teacher/${currentUser.id}`
+      : `${import.meta.env.VITE_BASE_URL}/api/user/${currentUser.id}`;
 
     try {
       const response = await axios.put(endpoint, normalizedData, {
-        withCredentials: true, // If using cookies for authentication
+        withCredentials: true,
       });
       toast.success("Profile updated successfully!");
-
-      // Update the context with the new user data
       updateUser(response.data);
-
       onClose();
     } catch (error) {
       console.error("Error response:", error.response);
-      if (
-        error.response &&
-        error.response.data &&
-        error.response.data.message === "Email is already in use"
-      ) {
+      if (error.response?.data?.message === "Email is already in use") {
         toast.error("The email is already in use. Please choose another one.");
       } else {
         toast.error("Something went wrong!");
@@ -189,7 +194,7 @@ const UpdateProfile = ({ isOpen, onClose }) => {
       title="Update Profile"
       actionLabel="Save Changes"
       onClose={onClose}
-      onSubmit={handleSubmit(onSubmit)} // Use handleSubmit from react-hook-form
+      onSubmit={handleSubmit(onSubmit)}
       body={bodyContent}
       footer={footerContent}
     />
