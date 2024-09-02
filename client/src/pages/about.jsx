@@ -1,7 +1,10 @@
 import React from 'react'
+import { useContext } from 'react';
+import { AuthContext } from '../context/AuthContext'
 
 
-const about = ({openRoleSignUpModal}) => {
+const about = ({openRegisterModal}) => {
+  const { currentUser } = useContext(AuthContext);
   return (
     <div>
     <div className='flex flex-col gap-6 md:flex mx-20 mb-10'>
@@ -65,7 +68,7 @@ const about = ({openRoleSignUpModal}) => {
           <div className='md:col-span-10 md:-order-1'>
            <h1 className='text-2xl text-center font-serif font-semibold md:text-[35px]'>Join Us</h1>
            <p className='mt-2 text-base text-center font-serif md:font-normal md:mt-4 md:text-[18px]'>Ready to embark on your learning journey? Sign up for myTutor today and start connecting with tutors who can help you achieve your goals.</p>
-           <div className='flex justify-center'><button className='content-center p-3 mt-4 min-w-[100px] cursor-pointer rounded-lg bg-sky-600 hover:bg-sky-400 md:min-w-[120px]'onClick={openRoleSignUpModal}>Register</button></div>
+           {!currentUser && <div className='flex justify-center'><button className='content-center p-3 mt-4 min-w-[100px] cursor-pointer rounded-lg bg-sky-600 hover:bg-sky-400 md:min-w-[120px]'onClick={openRegisterModal}>Register</button></div>}
           </div>
       </div>
 
