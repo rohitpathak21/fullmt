@@ -20,6 +20,7 @@ const UpdateAddressModal = ({ isOpen, onClose }) => {
     register,
     handleSubmit,
     formState: { errors, isSubmitting },
+    setValue,
   } = useForm({
     defaultValues: {
       street: currentUser?.street || "",
@@ -28,6 +29,16 @@ const UpdateAddressModal = ({ isOpen, onClose }) => {
       pin: currentUser?.pin || "",
     },
   });
+
+  // Set default values when currentUser changes
+  React.useEffect(() => {
+    if (currentUser) {
+      setValue("street", currentUser.street || "");
+      setValue("area", currentUser.area || "");
+      setValue("city", currentUser.city || "");
+      setValue("pin", currentUser.pin || "");
+    }
+  }, [currentUser, setValue]);
 
   const onSubmit = async (data) => {
     // Normalize data
@@ -40,8 +51,8 @@ const UpdateAddressModal = ({ isOpen, onClose }) => {
     // Determine endpoint based on role
     const role = getRole();
     const endpoint = role === "Teacher"
-    ? `${import.meta.env.VITE_BASE_URL}/api/teacher/address/${currentUser.id}`
-    : `${import.meta.env.VITE_BASE_URL}/api/user/address/${currentUser.id}`;
+      ? `${import.meta.env.VITE_BASE_URL}/api/teacher/address/${currentUser.id}`
+      : `${import.meta.env.VITE_BASE_URL}/api/user/address/${currentUser.id}`;
   
     try {
       const response = await axios.put(endpoint, normalizedData, {
@@ -58,7 +69,6 @@ const UpdateAddressModal = ({ isOpen, onClose }) => {
       toast.error("Failed to update address!");
     }
   };
-  
 
   const bodyContent = (
     <div className="flex flex-col gap-4">
