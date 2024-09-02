@@ -53,6 +53,7 @@ const Input = forwardRef(({
         />
       )}
       <label
+        htmlFor={id} // Add this line to associate the label with the input
         className={`
           absolute
           text-md
