@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import axios from "axios";
 import { AuthContext } from '../../context/AuthContext';
@@ -11,19 +11,19 @@ import Button from "../Button";
 
 const UpdateAcadInfo = ({ isOpen, onClose }) => {
   const { currentUser, updateUser } = useContext(AuthContext);
+  const { register, handleSubmit, formState: { errors, isSubmitting }, reset } = useForm();
 
-  const {
-    register,
-    handleSubmit,
-    formState: { errors, isSubmitting },
-  } = useForm({
-    defaultValues: {
-      class: currentUser?.class || "",
-      school: currentUser?.school || "",
-      subject: currentUser?.subject || "",
-      preference: currentUser?.preference || "",
-    },
-  });
+  // Use useEffect to reset the form with currentUser data when the modal opens
+  useEffect(() => {
+    if (currentUser) {
+      reset({
+        class: currentUser.class || "",
+        school: currentUser.school || "",
+        subject: currentUser.subject || "",
+        preference: currentUser.preference || "",
+      });
+    }
+  }, [currentUser, reset, isOpen]);
 
   const onSubmit = async (data) => {
     try {
