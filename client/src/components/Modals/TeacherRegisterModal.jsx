@@ -16,8 +16,7 @@ const capitalizeWords = (str) => {
     .join(" ");
 };
 
-
-const RegisterModal = ({ isOpen, onClose, onLogin }) => {
+const TeacherRegisterModal = ({ isOpen, onClose, onLogin }) => {
   const {
     register,
     handleSubmit,
@@ -36,7 +35,7 @@ const RegisterModal = ({ isOpen, onClose, onLogin }) => {
       console.log(normalizedData);
       const response = await axios.post(`${import.meta.env.VITE_BASE_URL}/api/teacherauth/register`, normalizedData);
       if (response.status === 201) {
-        toast.success("Teacher registration successful! Please check your email for verification.");
+        toast.success("Teacher registration successfull!");
         onLogin();
         reset();
       } else {
@@ -162,6 +161,7 @@ const RegisterModal = ({ isOpen, onClose, onLogin }) => {
           error={errors.password?.message}
         />
       </div>
+      <p className="text-gray-400 text-base mt-2 md:mt-4 text-center">The email will be permanent and can't be changed later.</p>
     </div>
   );
 
@@ -202,4 +202,4 @@ const RegisterModal = ({ isOpen, onClose, onLogin }) => {
   );
 };
 
-export default RegisterModal;
+export default TeacherRegisterModal;
