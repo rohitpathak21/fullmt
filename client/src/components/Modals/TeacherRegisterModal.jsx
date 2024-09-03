@@ -1,4 +1,4 @@
-import { React } from "react";
+import React from "react";
 import { useForm } from "react-hook-form";
 import axios from "axios";
 import { FcGoogle } from "react-icons/fc";
@@ -6,6 +6,7 @@ import Modal from "./Modals";
 import Heading from "../Heading";
 import Input from "../Input";
 import toast from "react-hot-toast";
+import Select from "../Select";
 import Button from "../Button";
 
 const capitalizeWords = (str) => {
@@ -15,10 +16,6 @@ const capitalizeWords = (str) => {
     .join(" ");
 };
 
-const capitalizeFirstLetter = (str) => {
-  if (!str) return "";
-  return str.charAt(0).toUpperCase() + str.slice(1).toLowerCase();
-};
 
 const RegisterModal = ({ isOpen, onClose, onLogin }) => {
   const {
@@ -29,23 +26,21 @@ const RegisterModal = ({ isOpen, onClose, onLogin }) => {
   } = useForm();
 
   const onSubmit = async (data) => {
-    // Normalize email to lowercase and capitalize first letter of gender
     const normalizedData = {
       ...data,
       email: data.email.toLowerCase().trim(),
-      gender: capitalizeFirstLetter(data.gender),
-      fullname: capitalizeWords(data.fullname), // Capitalize each word in the name
+      fullname: capitalizeWords(data.fullname),
     };
 
     try {
       console.log(normalizedData);
       const response = await axios.post(`${import.meta.env.VITE_BASE_URL}/api/teacherauth/register`, normalizedData);
-      if (response.status === 201) { // Check for successful registration
+      if (response.status === 201) {
         toast.success("Teacher registration successful! Please check your email for verification.");
         onLogin();
-        reset();// Call the onLogin callback only on successful registration
+        reset();
       } else {
-        toast.error("Something went wrong!"); // Handle unexpected response statuses
+        toast.error("Something went wrong!");
       }
     } catch (error) {
       console.error("Error response:", error.response);
@@ -97,21 +92,18 @@ const RegisterModal = ({ isOpen, onClose, onLogin }) => {
       </div>
 
       <div className="flex flex-col md:flex-row gap-4">
-        <Input
+        <Select
           id="gender"
           label="Gender"
-          type="text"
           disabled={isSubmitting}
           {...register("gender", {
             required: "Gender is required",
-            validate: (value) => {
-              const normalizedValue = value.toLowerCase();
-              return (
-                ["male", "female", "transgender"].includes(normalizedValue) ||
-                "Invalid gender"
-              );
-            },
           })}
+          options={[
+            { value: "Male", label: "Male" },
+            { value: "Female", label: "Female" },
+            { value: "Transgender", label: "Transgender" },
+          ]}
           error={errors.gender?.message}
         />
         <Input
