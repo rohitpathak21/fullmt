@@ -24,6 +24,7 @@ const RegisterModal = ({ isOpen, onClose, onLogin }) => {
   const {
     register,
     handleSubmit,
+    reset,
     formState: { errors, isSubmitting },
   } = useForm();
 
@@ -41,7 +42,8 @@ const RegisterModal = ({ isOpen, onClose, onLogin }) => {
       const response = await axios.post(`${import.meta.env.VITE_BASE_URL}/api/teacherauth/register`, normalizedData);
       if (response.status === 201) { // Check for successful registration
         toast.success("Teacher registration successful! Please check your email for verification.");
-        onLogin();// Call the onLogin callback only on successful registration
+        onLogin();
+        reset();// Call the onLogin callback only on successful registration
       } else {
         toast.error("Something went wrong!"); // Handle unexpected response statuses
       }
