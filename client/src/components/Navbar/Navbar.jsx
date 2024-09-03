@@ -13,6 +13,11 @@ const Navbar = ({ onLoginClick, onSignUpClick }) => {
     const isActive = (path) => location.pathname === path 
         ? 'p-3 bg-yellow-400 text-black rounded-md' 
         : 'text-white';
+    
+    const isProfileActive = (path) => location.pathname === path 
+        ? 'p-3 bg-yellow-400 text-black rounded-md' 
+        : 'p-3 bg-yellow-400 text-white rounded-md';
+    
 
     // Determine the text for the Feed button based on user role
     const feedButtonText = currentUser?.role === 'Teacher' ? 'Find Students' : 'Find Tutors';
@@ -62,10 +67,11 @@ const Navbar = ({ onLoginClick, onSignUpClick }) => {
                     >
                         Sign Up
                     </button>}
-                    {currentUser && <button className='p-3 bg-yellow-400 rounded-md text-black'>
+                    {currentUser && <button>
                         <Link 
                             to="/profile" 
-                            className={isActive('/profile')}>
+                            className={isProfileActive('/profile')}
+                            onClick={() => setToggle(false)}>
                             Profile
                         </Link>
                     </button>}
@@ -119,10 +125,10 @@ const Navbar = ({ onLoginClick, onSignUpClick }) => {
                     >
                         Sign Up
                     </button>}
-                    {currentUser && <button className='p-3 bg-yellow-400 rounded-md text-black'>
+                    {currentUser && <button>
                         <Link 
                             to="/profile" 
-                            className={isActive('/profile')}>
+                            className={isProfileActive('/profile')}>
                             Profile
                         </Link>
                     </button>}
