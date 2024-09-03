@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import axios from "axios";
 import { AuthContext } from '../../context/AuthContext';
@@ -14,13 +14,17 @@ const UpdateTeachingLocation = ({ isOpen, onClose }) => {
   const {
     register,
     handleSubmit,
+    setValue, // Import setValue to manually set form values
     formState: { errors, isSubmitting },
-  } = useForm({
-    defaultValues: {
-      area: currentUser?.preferredarea || "",
-      city: currentUser?.preferredcity|| "",
-    },
-  });
+  } = useForm();
+
+  // Set form values when currentUser changes
+  useEffect(() => {
+    if (currentUser) {
+      setValue("area", currentUser.preferredarea || "");
+      setValue("city", currentUser.preferredcity || "");
+    }
+  }, [currentUser, setValue]);
 
   const onSubmit = async (data) => {
     try {
