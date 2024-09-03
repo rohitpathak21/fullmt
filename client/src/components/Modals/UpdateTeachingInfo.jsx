@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import axios from "axios";
 import { AuthContext } from '../../context/AuthContext';
@@ -14,13 +14,24 @@ const UpdateTeachingDetails = ({ isOpen, onClose }) => {
   const {
     register,
     handleSubmit,
+    reset,
     formState: { errors, isSubmitting },
   } = useForm({
     defaultValues: {
-      qualification: currentUser?.qualification || "",
-      subject: currentUser?.subject || "",
+      qualification: "",
+      subject: "",
     },
   });
+
+  // Reset the form with currentUser data whenever currentUser changes
+  useEffect(() => {
+    if (currentUser) {
+      reset({
+        qualification: currentUser.qualification || "",
+        subject: currentUser.subject || "",
+      });
+    }
+  }, [currentUser, reset]);
 
   const onSubmit = async (data) => {
     try {
@@ -58,7 +69,7 @@ const UpdateTeachingDetails = ({ isOpen, onClose }) => {
         <Input
           id="subject"
           label="Subject/Skill"
-          textarea // Use textarea prop here
+          textarea
           disabled={isSubmitting}
           {...register("subject", {
             required: "This field is required",
