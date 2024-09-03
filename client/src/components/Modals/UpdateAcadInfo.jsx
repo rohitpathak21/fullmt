@@ -11,19 +11,17 @@ import Button from "../Button";
 
 const UpdateAcadInfo = ({ isOpen, onClose }) => {
   const { currentUser, updateUser } = useContext(AuthContext);
-  const { register, handleSubmit, formState: { errors, isSubmitting }, reset } = useForm();
+  const { register, handleSubmit, formState: { errors, isSubmitting }, setValue } = useForm();
 
-  // Use useEffect to reset the form with currentUser data when the modal opens
+  // Use useEffect to set form values with currentUser data when the modal opens
   useEffect(() => {
     if (currentUser) {
-      reset({
-        class: currentUser.class || "",
-        school: currentUser.school || "",
-        subject: currentUser.subject || "",
-        preference: currentUser.preference || "",
-      });
+      setValue("class", currentUser.class || "");
+      setValue("school", currentUser.school || "");
+      setValue("subject", currentUser.subject || "");
+      setValue("preference", currentUser.preference || "");
     }
-  }, [currentUser, reset, isOpen]);
+  }, [currentUser, setValue, isOpen]);
 
   const onSubmit = async (data) => {
     try {
