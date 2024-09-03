@@ -7,11 +7,11 @@ const about = ({openRegisterModal}) => {
   const { currentUser } = useContext(AuthContext);
   return (
     <div>
-    <div className='flex flex-col gap-6 md:flex mx-20 mb-10'>
+    <div className='flex flex-col gap-6 md:flex mx-10 md:mx-20 mb-10'>
 
       <div className='text-center text-white'> 
-        <h1 className='text-3xl font-bold mt-[80px] md:text-[35px]'> Welcome to myTutor</h1>
-        <p className='text-lg font-normal mt-2 md:text-[20px] md:mt-4'>At myTutor, we're passionate about connecting individuals with the resources they need to thrive. Out platform was born of a simple realization: finding a qualified tutor nearby for a specific task shouldn't be a daunting task.</p>
+        <h1 className='text-3xl font-bold mt-10 md:mt-20 md:text-[35px] pb-4'> Welcome to myTutor</h1>
+        <p className='text-lg font-normal mt-2 md:text-[20px] md:mt-4 mb-4'>At myTutor, we're passionate about connecting individuals with the resources they need to thrive. Out platform was born of a simple realization: finding a qualified tutor nearby for a specific task shouldn't be a daunting task.</p>
       </div>
 
       <div className='flex flex-col bg-orange-400 rounded-lg justify-between p-6 gap-5 md:grid md:grid-cols-12 md:mt-6 md:p-10'>
