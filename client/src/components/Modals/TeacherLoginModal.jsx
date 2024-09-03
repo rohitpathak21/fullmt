@@ -18,6 +18,7 @@ const TeacherLoginModal = ({ isOpen, onClose, onSignUp }) => {
   const {
     register,
     handleSubmit,
+    reset,
     formState: { errors, isSubmitting },
   } = useForm();
 
@@ -34,7 +35,8 @@ const TeacherLoginModal = ({ isOpen, onClose, onSignUp }) => {
 
       updateUser(response.data); // Save to local storage
       toast.success("Login successful!");
-      onClose(); // Close the modal on successful login
+      onClose();
+      reset();// Close the modal on successful login
       navigate("/"); // Navigate to home page
     } catch (error) {
       if (error.response && error.response.data) {
