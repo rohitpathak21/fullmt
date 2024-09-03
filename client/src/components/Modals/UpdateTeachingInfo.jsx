@@ -14,24 +14,17 @@ const UpdateTeachingDetails = ({ isOpen, onClose }) => {
   const {
     register,
     handleSubmit,
-    reset,
+    setValue, // Import setValue to manually set form values
     formState: { errors, isSubmitting },
-  } = useForm({
-    defaultValues: {
-      qualification: "",
-      subject: "",
-    },
-  });
+  } = useForm();
 
-  // Reset the form with currentUser data whenever currentUser changes
+  // Set form values when currentUser changes
   useEffect(() => {
     if (currentUser) {
-      reset({
-        qualification: currentUser.qualification || "",
-        subject: currentUser.subject || "",
-      });
+      setValue("qualification", currentUser.qualification || "");
+      setValue("subject", currentUser.subject || "");
     }
-  }, [currentUser, reset]);
+  }, [currentUser, setValue]);
 
   const onSubmit = async (data) => {
     try {
