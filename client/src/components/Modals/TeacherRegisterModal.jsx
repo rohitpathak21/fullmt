@@ -35,7 +35,7 @@ const TeacherRegisterModal = ({ isOpen, onClose, onLogin }) => {
       console.log(normalizedData);
       const response = await axios.post(`${import.meta.env.VITE_BASE_URL}/api/teacherauth/register`, normalizedData);
       if (response.status === 201) {
-        toast.success("Teacher registration successfull!");
+        toast.success("Teacher registration successful!");
         onLogin();
         reset();
       } else {
