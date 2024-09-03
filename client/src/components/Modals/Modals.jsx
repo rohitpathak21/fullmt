@@ -55,7 +55,7 @@ const Modal = ({
         items-center 
         flex 
         overflow-x-hidden 
-        overflow-y-hidden
+        overflow-y-auto
         fixed 
         inset-0 
         z-50 
