@@ -1,4 +1,4 @@
-import React from "react";
+import {React, useState} from "react";
 import { useForm } from "react-hook-form";
 import axios from "axios";
 import { FcGoogle } from "react-icons/fc";
@@ -6,7 +6,7 @@ import Modal from "./Modals";
 import Heading from "../Heading";
 import Input from "../Input";
 import toast from "react-hot-toast";
-import Select from "../Select";
+import Select from "../Select"
 import Button from "../Button";
 
 const capitalizeWords = (str) => {
@@ -20,23 +20,22 @@ const RegisterModal = ({ isOpen, onClose, onLogin }) => {
   const {
     register,
     handleSubmit,
-    reset, // Add reset to destructure
     formState: { errors, isSubmitting },
   } = useForm();
 
   const onSubmit = async (data) => {
+    // Normalize email to lowercase 
     const normalizedData = {
       ...data,
       email: data.email.toLowerCase().trim(),
-      fullname: capitalizeWords(data.fullname),
+      fullname: capitalizeWords(data.fullname), // Capitalize each word in the name
     };
 
     try {
       console.log(normalizedData);
       await axios.post(`${import.meta.env.VITE_BASE_URL}/api/auth/register`, normalizedData);
       toast.success("Registration successful! Please check your email for verification.");
-      reset(); // Reset form after successful submission
-      onLogin(); // Switch to LoginModal
+      onLogin();
     } catch (error) {
       console.error("Error response:", error.response);
       if (
@@ -49,6 +48,7 @@ const RegisterModal = ({ isOpen, onClose, onLogin }) => {
         toast.error("Something went wrong!");
       }
     }
+  
   };
 
   const bodyContent = (
@@ -69,7 +69,7 @@ const RegisterModal = ({ isOpen, onClose, onLogin }) => {
           })}
           error={errors.email?.message}
         />
-
+        
         <Input
           id="fullname"
           label="Name"
@@ -82,12 +82,12 @@ const RegisterModal = ({ isOpen, onClose, onLogin }) => {
               message: "Name must be less than 20 characters",
             },
           })}
-          error={errors.fullname?.message}
+          error={errors.name?.message}
         />
       </div>
 
       <div className="flex flex-col md:flex-row gap-4">
-        <Select
+      <Select
           id="gender"
           label="Gender"
           disabled={isSubmitting}
@@ -99,7 +99,6 @@ const RegisterModal = ({ isOpen, onClose, onLogin }) => {
             { value: "Female", label: "Female" },
             { value: "Transgender", label: "Transgender" },
           ]}
-          error={errors.gender?.message}
         />
         <Input
           id="age"
@@ -157,6 +156,7 @@ const RegisterModal = ({ isOpen, onClose, onLogin }) => {
           error={errors.password?.message}
         />
       </div>
+      <p className="text-gray-400 text-base mt-4 text-center">The email will be permanent and can't be changed later.</p>
     </div>
   );
 
