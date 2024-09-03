@@ -12,7 +12,7 @@ const Modal = ({
   footer, 
   disabled,
   secondaryAction,
-  secondaryActionLabel
+  secondaryActionLabel,
 }) => {
   const [showModal, setShowModal] = useState(isOpen);
 
@@ -73,7 +73,7 @@ const Modal = ({
         xl:w-2/5
         my-6
         mx-auto 
-        h-full 
+        max-h-[100vh]
         lg:h-auto
         md:h-auto
         "
