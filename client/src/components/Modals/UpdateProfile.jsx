@@ -6,6 +6,7 @@ import Modal from "./Modals";
 import Heading from "../Heading";
 import Input from "../Input";
 import toast from "react-hot-toast";
+import Select from "../Select"
 import Button from "../Button";
 
 const capitalizeWords = (str) => {
@@ -15,11 +16,6 @@ const capitalizeWords = (str) => {
     .join(" ");
 };
 
-const capitalizeFirstLetter = (str) => {
-  if (!str) return "";
-  return str.charAt(0).toUpperCase() + str.slice(1).toLowerCase();
-};
-
 const UpdateProfile = ({ isOpen, onClose }) => {
   const { currentUser, updateUser, getRole } = useContext(AuthContext);
 
@@ -27,25 +23,31 @@ const UpdateProfile = ({ isOpen, onClose }) => {
     register,
     handleSubmit,
     formState: { errors, isSubmitting },
-    setValue, // Use setValue instead of reset
-  } = useForm();
+    reset, // Add reset method
+  } = useForm({
+    defaultValues: {
+      fullname: "",
+      gender: "",
+      age: "",
+      phone: "",
+    },
+  });
 
   // Use useEffect to set the default values when currentUser is available
   useEffect(() => {
     if (currentUser) {
-      setValue("fullname", currentUser.fullname || "");
-      setValue("email", currentUser.email || "");
-      setValue("gender", currentUser.gender || "");
-      setValue("age", currentUser.age || "");
-      setValue("phone", currentUser.phone || "");
+      reset({
+        fullname: currentUser.fullname || "",
+        gender: currentUser.gender || "",
+        age: currentUser.age || "",
+        phone: currentUser.phone || "",
+      });
     }
-  }, [currentUser, setValue]); // Dependency array includes currentUser and setValue
+  }, [currentUser, reset]); // Dependency array includes currentUser and reset
 
   const onSubmit = async (data) => {
     const normalizedData = {
       ...data,
-      email: data.email.toLowerCase().trim(),
-      gender: capitalizeFirstLetter(data.gender),
       fullname: capitalizeWords(data.fullname),
     };
 
@@ -91,41 +93,23 @@ const UpdateProfile = ({ isOpen, onClose }) => {
           error={errors.fullname?.message}
         />
 
-        <Input
-          id="email"
-          label="Email"
-          type="email"
-          disabled={isSubmitting}
-          {...register("email", {
-            required: "Email is required",
-            pattern: {
-              value: /^\s*[^\s@]+@[^\s@]+\.[^\s@]+\s*$/,
-              message: "Invalid email address",
-            },
-          })}
-          error={errors.email?.message}
-        />
+        
       </div>
 
       <div className="flex flex-col md:flex-row gap-4">
-        <Input
+      <Select
           id="gender"
           label="Gender"
-          type="text"
           disabled={isSubmitting}
           {...register("gender", {
             required: "Gender is required",
-            validate: (value) => {
-              const normalizedValue = value.toLowerCase();
-              return (
-                ["male", "female", "transgender"].includes(normalizedValue) ||
-                "Invalid gender"
-              );
-            },
           })}
-          error={errors.gender?.message}
+          options={[
+            { value: "Male", label: "Male" },
+            { value: "Female", label: "Female" },
+            { value: "Transgender", label: "Transgender" },
+          ]}
         />
-
         <Input
           id="age"
           label="Age"
