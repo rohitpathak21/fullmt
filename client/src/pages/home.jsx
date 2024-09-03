@@ -3,7 +3,7 @@ import {useContext} from 'react';
 import { useNavigate } from 'react-router-dom';
 import { AuthContext } from '../context/AuthContext';
 
-const Home = ({openRoleSignUpModal}) => {
+const Home = ({openRoleSignUpModal, openRoleLoginModal}) => {
 
   const navigate =useNavigate();
   const { currentUser } = useContext(AuthContext);
@@ -25,12 +25,13 @@ const Home = ({openRoleSignUpModal}) => {
         <div className='flex gap-10 pt-6 font-medium mx-auto md:mx-0'>
         <button className='p-5 min-w-[120px] cursor-pointer border-none rounded-lg bg-white text-blue-950' onClick={handleLearnMore}>Learn More</button>
         {!currentUser && <button className='p-5 min-w-[120px] cursor-pointer border-none rounded-lg bg-sky-600 hover:bg-sky-400' onClick={openRoleSignUpModal} >Register</button>}
-        
+        {!currentUser && < button className='p-5 w-[120px] cursor-pointer border-none rounded-lg bg-sky-600 hover:bg-sky-400 hidden md:block' onClick={openRoleLoginModal} >Login</button>}
         </div> 
+        {!currentUser && <div className='flex justify-center md:hidden'> <button className='p-5 w-[120px] cursor-pointer border-none rounded-lg bg-sky-600 hover:bg-sky-400' onClick={openRoleLoginModal} >Login</button> </div>}
       </div>
 
 
-      <div className='flex-1 hidden md:block'>
+      <div className='flex-1 hidden lg:block'>
         <img src="/placeholder.png" alt="" className='w-56 h-56 relative top-32 right-12'/>
         <img src="/placeholder.png" alt="" className='w-56 h-56 relative left-64 bottom-52'/>
         <img src="/placeholder.png" alt="" className='w-56 h-56 relative left-64 bottom-32'/>
