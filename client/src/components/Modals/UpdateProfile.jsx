@@ -27,29 +27,19 @@ const UpdateProfile = ({ isOpen, onClose }) => {
     register,
     handleSubmit,
     formState: { errors, isSubmitting },
-    reset, // Add reset method
-  } = useForm({
-    defaultValues: {
-      fullname: "",
-      email: "",
-      gender: "",
-      age: "",
-      phone: "",
-    },
-  });
+    setValue, // Use setValue instead of reset
+  } = useForm();
 
   // Use useEffect to set the default values when currentUser is available
   useEffect(() => {
     if (currentUser) {
-      reset({
-        fullname: currentUser.fullname || "",
-        email: currentUser.email || "",
-        gender: currentUser.gender || "",
-        age: currentUser.age || "",
-        phone: currentUser.phone || "",
-      });
+      setValue("fullname", currentUser.fullname || "");
+      setValue("email", currentUser.email || "");
+      setValue("gender", currentUser.gender || "");
+      setValue("age", currentUser.age || "");
+      setValue("phone", currentUser.phone || "");
     }
-  }, [currentUser, reset]); // Dependency array includes currentUser and reset
+  }, [currentUser, setValue]); // Dependency array includes currentUser and setValue
 
   const onSubmit = async (data) => {
     const normalizedData = {
