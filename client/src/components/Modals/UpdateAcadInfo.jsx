@@ -21,7 +21,7 @@ const UpdateAcadInfo = ({ isOpen, onClose }) => {
       setValue("subject", currentUser.subject || "");
       setValue("preference", currentUser.preference || "");
     }
-  }, [currentUser, setValue, isOpen]);
+  }, [currentUser, setValue]);
 
   const onSubmit = async (data) => {
     try {
